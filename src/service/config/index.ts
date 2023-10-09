@@ -1,5 +1,5 @@
-export const BASE_URL = "http://codercba.com:8000";
-export const TIME_OUT = 10000;
+// export const BASE_URL = "http://152.136.185.210:5000";
+// export const TIME_OUT = 10000;
 
 // 1.区分开发环境和生产环境
 // export const BASE_URL = 'http://coderwhy.dev:8000'
@@ -14,5 +14,16 @@ export const TIME_OUT = 10000;
 
 // 3.通过创建.env文件来创建变量
 // 要以VITE_开头
-console.log(import.meta.env.VITE_URL);
-console.log(import.meta.env.VITE_BA);
+// console.log(import.meta.env.VITE_URL);
+// console.log(import.meta.env.VITE_BA);
+
+let BASE_URL = "";
+if (import.meta.env.PROD) {
+  // 生产环境
+  BASE_URL = "http://123.207.32.32:5000";
+} else {
+  // 开发环境
+  BASE_URL = "http://123.207.32.32:5000";
+}
+export const TIME_OUT = 10000;
+export { BASE_URL };
