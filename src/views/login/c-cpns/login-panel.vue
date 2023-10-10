@@ -43,17 +43,22 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import PaneAccount from "./pane-account.vue";
 import PanePhone from "./pane-phone.vue";
+import { localCache } from "@/utils/cache";
 
 const activeName = ref("account");
-const isRemPwd = ref(false);
+const CACHE_ISREMPWD = "isRemPwd";
+const isRemPwd = ref<boolean>(localCache.getCache(CACHE_ISREMPWD) ?? false);
+watch(isRemPwd, (newVal) => {
+  localCache.setCache(CACHE_ISREMPWD, newVal);
+});
 const accountRef = ref<InstanceType<typeof PaneAccount>>();
 
 function handleLoginBtnClick() {
   if (activeName.value === "account") {
-    accountRef.value?.loginAction();
+    accountRef.value?.loginAction(isRemPwd.value);
   } else {
     console.log("手机登陆");
   }

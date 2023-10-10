@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { AxiosInstance } from "axios";
+import type { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 import type { HYRequestConfig } from "./type";
 
 // 拦截器: 蒙版Loading/token/修改配置
@@ -46,12 +46,12 @@ class HYRequest {
 
     // 针对特定的hyRequest实例添加拦截器
     this.instance.interceptors.request.use(
-      config.interceptors?.requestSuccessFn,
-      config.interceptors?.requestFailureFn,
+      config.interceptors?.requestInterceptor,
+      config.interceptors?.requestInterceptorCatch,
     );
     this.instance.interceptors.response.use(
-      config.interceptors?.responseSuccessFn,
-      config.interceptors?.responseFailureFn,
+      config.interceptors?.responseInterceptor,
+      config.interceptors?.responseInterceptorCatch,
     );
   }
 
@@ -59,8 +59,11 @@ class HYRequest {
   // T => IHomeData
   request<T = any>(config: HYRequestConfig<T>) {
     // 单次请求的成功拦截处理
-    if (config.interceptors?.requestSuccessFn) {
-      config = config.interceptors.requestSuccessFn(config);
+    if (config.interceptors?.requestInterceptor) {
+      config = config.interceptors.requestInterceptor(
+        // 强制类型转换
+        config as InternalAxiosRequestConfig,
+      );
     }
 
     // 返回Promise
@@ -69,8 +72,8 @@ class HYRequest {
         .request<any, T>(config)
         .then((res) => {
           // 单词响应的成功拦截处理
-          if (config.interceptors?.responseSuccessFn) {
-            res = config.interceptors.responseSuccessFn(res);
+          if (config.interceptors?.responseInterceptor) {
+            res = config.interceptors.responseInterceptor(res);
           }
           resolve(res);
         })

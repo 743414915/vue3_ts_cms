@@ -27,11 +27,14 @@ import type { IAccount } from "@/types";
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import useLoginStore from "@/store/login/login";
+import { localCache } from "@/utils/cache";
 
+const CACHE_NAME = "name";
+const CACHE_PASSWORD = "password";
 // 定义account数据
 const account = reactive<IAccount>({
-  name: "coderwhy",
-  password: "123456",
+  name: localCache.getCache(CACHE_NAME) ?? "",
+  password: localCache.getCache(CACHE_PASSWORD) ?? "",
 });
 
 // 定义校验规则
@@ -43,7 +46,7 @@ const accountRules: FormRules = {
 // 执行帐号登录逻辑
 const formRef = ref<InstanceType<typeof ElForm>>();
 const loginStore = useLoginStore();
-function loginAction() {
+function loginAction(isRemPwd: boolean) {
   formRef.value?.validate(async (valid) => {
     // 验证失败
     if (!valid) {
@@ -52,7 +55,18 @@ function loginAction() {
     }
     const name = account.name;
     const password = account.password;
-    loginStore.loginAccountAction({ name, password });
+
+    // 发起网络请求
+    loginStore.loginAccountAction({ name, password }).then(() => {
+      // 判断是否需要记住密码
+      if (isRemPwd) {
+        localCache.setCache(CACHE_NAME, name);
+        localCache.setCache(CACHE_PASSWORD, password);
+      } else {
+        localCache.removeCache(CACHE_NAME);
+        localCache.removeCache(CACHE_PASSWORD);
+      }
+    });
   });
 }
 defineExpose({

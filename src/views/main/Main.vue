@@ -1,17 +1,15 @@
 <template>
   <div class="main">
-    <h2>main:{{ counterStore.counter }}-{{ counterStore.doubleCounter }}</h2>
-    <button @click="changeCounter">修改counter</button>
+    <el-container>
+      <el-aside width="200px">Aside</el-aside>
+      <el-container>
+        <el-header>Header</el-header>
+        <el-main>Main</el-main>
+      </el-container>
+    </el-container>
   </div>
 </template>
-<script setup lang="ts">
-import useCounterStore from "@/store/counter";
-const counterStore = useCounterStore();
-
-const changeCounter = () => {
-  counterStore.changeCounterAction(99);
-};
-</script>
+<script setup lang="ts"></script>
 <style lang="less" scoped>
 .main {
 }
