@@ -1,0 +1,8 @@
+<template>
+  <div class="main-header">header</div>
+</template>
+<script setup lang="ts"></script>
+<style lang="less" scoped>
+.main-header {
+}
+</style>

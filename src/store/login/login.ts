@@ -15,13 +15,15 @@ interface ILoginState {
   userInfo: any;
   usersMenus: any;
 }
+const USERINFO = "userInfo";
+const USERSMENUS = "usersMenus";
 
 const useLoginStore = defineStore("login", {
   // 指定state的类型
   state: (): ILoginState => ({
     token: localCache.getCache(LOGIN_TOKEN) ?? "",
-    userInfo: {},
-    usersMenus: [],
+    userInfo: localCache.getCache(USERINFO) ?? {},
+    usersMenus: localCache.getCache(USERSMENUS) ?? [],
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -29,17 +31,21 @@ const useLoginStore = defineStore("login", {
       const res = await accountLoginRequest(account);
       const id = res.data.id;
       this.token = res.data.token;
-
-      // 本地缓存
       localCache.setCache(LOGIN_TOKEN, this.token);
 
       // 获取登录用户详细信息（role权限信息）
       const userInfoRes = await getUserInfoById(id);
-      this.userInfo = userInfoRes.data;
+      const userInfo = userInfoRes.data;
+      this.userInfo = userInfo;
 
       // 根据角色请求用户的权限菜单
       const userMenusRes = await getUserMenusByRoleId(id);
-      this.usersMenus = userMenusRes.data;
+      const usersMenus = userMenusRes.data;
+      this.usersMenus = usersMenus;
+
+      // 本地缓存
+      localCache.setCache(USERINFO, userInfo);
+      localCache.setCache(USERSMENUS, usersMenus);
 
       // 页面跳转
       router.push("/main");
