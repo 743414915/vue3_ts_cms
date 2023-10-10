@@ -21,15 +21,17 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive } from "vue";
 import type { FormRules, ElForm } from "element-plus";
+import type { IAccount } from "@/types";
+
+import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
 import useLoginStore from "@/store/login/login";
 
 // 定义account数据
-const account = reactive({
-  name: "",
-  password: "",
+const account = reactive<IAccount>({
+  name: "coderwhy",
+  password: "123456",
 });
 
 // 定义校验规则
