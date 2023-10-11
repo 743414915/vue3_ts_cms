@@ -3,26 +3,18 @@
     <!-- logo -->
     <div class="logo">
       <img class="img" src="@/assets/img/logo.svg" alt="" />
-      <h2 class="title">管理系统</h2>
+      <h2 class="title" v-show="!isCollapse">管理系统</h2>
     </div>
 
     <!-- menu -->
     <div class="menu">
       <el-menu
         default-active="3"
+        :collapse="isCollapse"
         background-color="#0c2135"
         text-color="#b7bdc3"
         active-text-color="#0a60bd"
       >
-        <!-- 系统总览 -->
-        <!-- <el-sub-menu index="">
-          <template #title>
-            <el-icon><Monitor /></el-icon>
-            <span>系统总览</span>
-          </template>
-          <el-menu-item>核心技术</el-menu-item>
-          <el-menu-item>商品统计</el-menu-item>
-        </el-sub-menu> -->
         <template v-for="item in userMenus" :key="item.id">
           <el-sub-menu :index="item.id + ''">
             <template #title>
@@ -33,7 +25,10 @@
             </template>
 
             <template v-for="subitem in item.children" :key="subitem.id">
-              <el-menu-item :index="subitem.id + ''">
+              <el-menu-item
+                :index="subitem.id + ''"
+                @click="handleItemClick(subitem)"
+              >
                 {{ subitem.name }}
               </el-menu-item>
             </template>
@@ -45,10 +40,25 @@
 </template>
 <script setup lang="ts">
 import useLoginStore from "@/store/login/login";
+import { useRouter } from "vue-router";
+
+defineProps({
+  isCollapse: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 // 获取动态菜单
 const loginStroe = useLoginStore();
 const userMenus = loginStroe.usersMenus;
+
+// 监听菜单项的点击
+const router = useRouter();
+function handleItemClick(item: any) {
+  const url = item.url;
+  router.push(url);
+}
 </script>
 <style lang="less" scoped>
 .main-menu {
