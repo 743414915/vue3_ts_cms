@@ -9,6 +9,8 @@ import {
 import { localCache } from "@/utils/cache";
 import router from "@/router";
 import { LOGIN_TOKEN } from "@/global/constants";
+import type { RouteRecordRaw } from "vue-router";
+import { mapMenusToRoutes } from "@/utils/map-menus";
 
 interface ILoginState {
   token: string;
@@ -40,12 +42,16 @@ const useLoginStore = defineStore("login", {
 
       // 根据角色请求用户的权限菜单
       const userMenusRes = await getUserMenusByRoleId(id);
-      const usersMenus = userMenusRes.data;
-      this.usersMenus = usersMenus;
+      const userMenus = userMenusRes.data;
+      this.usersMenus = userMenus;
 
       // 本地缓存
       localCache.setCache(USERINFO, userInfo);
-      localCache.setCache(USERSMENUS, usersMenus);
+      localCache.setCache(USERSMENUS, userMenus);
+
+      // 动态添加路由
+      const routes = mapMenusToRoutes(userMenus);
+      routes.forEach((route) => router.addRoute("main", route));
 
       // 页面跳转
       router.push("/main");

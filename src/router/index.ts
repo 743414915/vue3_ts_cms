@@ -13,25 +13,8 @@ const router = createRouter({
     },
     {
       path: "/main",
+      name: "main",
       component: () => import("@/views/main"),
-      children: [
-        {
-          path: "/main/analysis/overview",
-          component: () => import("@/views/main/analysis/overview"),
-        },
-        {
-          path: "/main/analysis/dashboard",
-          component: () => import("@/views/main/analysis/dashboard"),
-        },
-        {
-          path: "/main/system/user",
-          component: () => import("@/views/main/system/user"),
-        },
-        {
-          path: "/main/system/role",
-          component: () => import("@/views/main/system/role"),
-        },
-      ],
     },
     {
       path: "/:pathMatch(.*)",
