@@ -39,7 +39,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed } from "vue";
 import useLoginStore from "@/store/login/login";
 import { useRouter, useRoute } from "vue-router";
 import { firstMenu } from "@/utils/map-menus";
@@ -65,8 +65,10 @@ function handleItemClick(item: any) {
 
 // El-Menu默认选中的菜单
 const route = useRoute();
-const pathMenu = mapPathToMenu(route.path, userMenus);
-const defaultActive = ref(pathMenu.id + "");
+const defaultActive = computed(() => {
+  const pathMenu = mapPathToMenu(route.path, userMenus);
+  return pathMenu.id + "";
+});
 </script>
 <style lang="less" scoped>
 .main-menu {

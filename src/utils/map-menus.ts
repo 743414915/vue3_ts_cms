@@ -29,6 +29,10 @@ export function mapMenusToRoutes(userMenus: any[]) {
     for (const submenu of menu.children) {
       const route = localRoutes.find((item) => item.path === submenu.url);
       if (route) {
+        // if (routes.find((item) => item.path === menu.url)) {
+        //   routes.push({ path: menu.url, redirect: route });
+        // }
+
         routes.push(route);
       }
       if (!firstMenu && route) {
@@ -53,4 +57,24 @@ export function mapPathToMenu(path: string, userMenus: any[]) {
     }
   }
   return undefined;
+}
+
+interface IBreadcrumbs {
+  name: string;
+  path: string;
+}
+export function mapPathToBreadcrumbs(path: string, userMenus: any[]) {
+  // 定义面包屑
+  const breadcrumbs: IBreadcrumbs[] = [];
+
+  // 遍历面包屑的层级
+  for (const menu of userMenus) {
+    for (const submenu of menu.children) {
+      if (submenu.url === path) {
+        breadcrumbs.push({ name: menu.name, path: menu.children[0].url });
+        breadcrumbs.push({ name: submenu.name, path: submenu.url });
+      }
+    }
+  }
+  return breadcrumbs;
 }
