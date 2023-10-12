@@ -19,7 +19,7 @@
       <el-dropdown>
         <span class="user-info">
           <el-avatar :size="30" :src="circleUrl" />
-          <span class="name">1234</span>
+          <span class="name">{{ username }}</span>
         </span>
         <template #dropdown>
           <el-dropdown-menu>
@@ -45,10 +45,14 @@
 import { LOGIN_TOKEN } from "@/global/constants";
 import { localCache } from "@/utils/cache";
 import { useRouter } from "vue-router";
+import useLoginStore from "@/store/login/login";
 
 // 头像的url
 const circleUrl =
   "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100";
+// 获取用户信息
+const userStore = useLoginStore();
+const username = userStore.userInfo.name;
 
 // 退出登录
 const router = useRouter();
