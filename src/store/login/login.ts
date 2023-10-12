@@ -23,9 +23,9 @@ const USERSMENUS = "usersMenus";
 const useLoginStore = defineStore("login", {
   // 指定state的类型
   state: (): ILoginState => ({
-    token: localCache.getCache(LOGIN_TOKEN) ?? "",
-    userInfo: localCache.getCache(USERINFO) ?? {},
-    usersMenus: localCache.getCache(USERSMENUS) ?? [],
+    token: "",
+    userInfo: {},
+    usersMenus: [],
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -55,6 +55,23 @@ const useLoginStore = defineStore("login", {
 
       // 页面跳转
       router.push("/main");
+    },
+
+    loadLocalCacheAction() {
+      const token = localCache.getCache(LOGIN_TOKEN);
+      const userInfo = localCache.getCache(USERINFO);
+      const usersMenus = localCache.getCache(USERSMENUS);
+
+      if (token && userInfo && usersMenus) {
+        this.token = token;
+        this.userInfo = userInfo;
+        this.usersMenus = usersMenus;
+
+        // 动态添加路由
+        // 动态添加路由
+        const routes = mapMenusToRoutes(usersMenus);
+        routes.forEach((route) => router.addRoute("main", route));
+      }
     },
   },
 });

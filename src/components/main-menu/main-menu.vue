@@ -9,7 +9,7 @@
     <!-- menu -->
     <div class="menu">
       <el-menu
-        default-active="3"
+        :default-active="defaultActive"
         :collapse="isCollapse"
         background-color="#0c2135"
         text-color="#b7bdc3"
@@ -39,8 +39,11 @@
   </div>
 </template>
 <script setup lang="ts">
+import { ref } from "vue";
 import useLoginStore from "@/store/login/login";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
+import { firstMenu } from "@/utils/map-menus";
+import { mapPathToMenu } from "@/utils/map-menus";
 
 defineProps({
   isCollapse: {
@@ -59,6 +62,11 @@ function handleItemClick(item: any) {
   const url = item.url;
   router.push(url);
 }
+
+// El-Menu默认选中的菜单
+const route = useRoute();
+const pathMenu = mapPathToMenu(route.path, userMenus);
+const defaultActive = ref(pathMenu.id + "");
 </script>
 <style lang="less" scoped>
 .main-menu {

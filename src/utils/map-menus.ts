@@ -17,6 +17,8 @@ function loadLocalRoutes() {
   return localRoutes;
 }
 
+// 获取第一个菜单项
+export let firstMenu: any = null;
 export function mapMenusToRoutes(userMenus: any[]) {
   // 加载本地路由
   const localRoutes = loadLocalRoutes();
@@ -29,7 +31,26 @@ export function mapMenusToRoutes(userMenus: any[]) {
       if (route) {
         routes.push(route);
       }
+      if (!firstMenu && route) {
+        firstMenu = submenu;
+      }
     }
   }
   return routes;
+}
+
+/**
+ * 根据路径去匹配对应的菜单
+ * @param path 匹配的路经
+ * @param userMenus 所有的菜单
+ */
+export function mapPathToMenu(path: string, userMenus: any[]) {
+  for (const menu of userMenus) {
+    for (const submenu of menu.children) {
+      if (submenu.url === path) {
+        return submenu;
+      }
+    }
+  }
+  return undefined;
 }
