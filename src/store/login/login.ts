@@ -11,6 +11,7 @@ import router from "@/router";
 import { LOGIN_TOKEN } from "@/global/constants";
 import type { RouteRecordRaw } from "vue-router";
 import { mapMenusToRoutes } from "@/utils/map-menus";
+import useMainStore from "../main/main";
 
 interface ILoginState {
   token: string;
@@ -49,6 +50,10 @@ const useLoginStore = defineStore("login", {
       localCache.setCache(USERINFO, userInfo);
       localCache.setCache(USERSMENUS, userMenus);
 
+      // 请求所有roles/departments的数据
+      const mainStore = useMainStore();
+      mainStore.fetchEntirDataAction();
+
       // 动态添加路由
       const routes = mapMenusToRoutes(userMenus);
       routes.forEach((route) => router.addRoute("main", route));
@@ -66,6 +71,10 @@ const useLoginStore = defineStore("login", {
         this.token = token;
         this.userInfo = userInfo;
         this.usersMenus = usersMenus;
+
+        // 请求所有roles/departments的数据
+        const mainStore = useMainStore();
+        mainStore.fetchEntirDataAction();
 
         // 动态添加路由
         // 动态添加路由

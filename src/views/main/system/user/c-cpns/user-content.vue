@@ -59,7 +59,13 @@
         </el-table-column>
         <el-table-column align="center" label="操作" width="160px">
           <template #default="scope">
-            <el-button icon="Edit" text type="primary" size="small">
+            <el-button
+              icon="Edit"
+              text
+              type="primary"
+              size="small"
+              @click="handleEditBtnClick(scope.row)"
+            >
               编辑
             </el-button>
             <el-button
@@ -94,6 +100,9 @@ import useSystemStore from "@/store/main/system/system";
 import { formatUTC } from "@/utils/format";
 import { ref } from "vue";
 
+// 定义事件
+const emit = defineEmits(["newClick", "editClick"]);
+
 // 页码相关
 const currentPage = ref(1);
 const pageSize = ref(10);
@@ -111,7 +120,7 @@ featchUserListData();
 // 获取usersList数据进行展示
 const { usersList, usersTotalCount } = storeToRefs(systemStore);
 
-// 用于网络请求
+// 用于网络请求获取用户列表
 function featchUserListData(formData: any = {}) {
   // 获取offset、size
   const size = pageSize.value;
@@ -126,9 +135,14 @@ function featchUserListData(formData: any = {}) {
 function handleDeleteBtnClick(id: number) {
   systemStore.deleteUserByIdAction(id);
 }
-
 // 新建用户的操作
-function handleNewUserClick() {}
+function handleNewUserClick() {
+  emit("newClick");
+}
+// 编辑用户的操作
+function handleEditBtnClick(itemData: any) {
+  emit("editClick", itemData);
+}
 
 defineExpose({ featchUserListData });
 </script>

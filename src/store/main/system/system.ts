@@ -1,5 +1,7 @@
 import {
   deleteUserById,
+  editUserData,
+  newUserData,
   postUsersListData,
 } from "@/service/main/system/system";
 import { defineStore } from "pinia";
@@ -26,6 +28,22 @@ const useSystemStore = defineStore("system", {
       // 重新请求新的数据
       this.postUsersListAction({ offset: 0, size: 10 });
       return deleteResult;
+    },
+    async newUserDataAction(userInfo: any) {
+      // 创建新用户
+      const newResult = await newUserData(userInfo);
+
+      // 重新请求新的数据
+      this.postUsersListAction({ offset: 0, size: 10 });
+      return newResult;
+    },
+    async editUserDataAction(id: number, userInfo: any) {
+      // 修改用户信息
+      const editResult = await editUserData(id, userInfo);
+
+      // 重新请求新的数据
+      this.postUsersListAction({ offset: 0, size: 10 });
+      return editResult;
     },
   },
   getters: {},

@@ -17,6 +17,28 @@ export function postUsersListData(queryInfo: any) {
  */
 export function deleteUserById(id: number) {
   return hyRequest.delete({
-    url: `/users/list/${id}`,
+    url: `/users/${id}`,
+  });
+}
+
+/**
+ * 创建用户
+ * @param userInfo 新建的用户信息
+ */
+export function newUserData(userInfo: any) {
+  return hyRequest.post({
+    url: `/users`,
+    data: userInfo,
+  });
+}
+
+/**
+ * 修改用户信息
+ * @param userInfo 修改的用户信息
+ */
+export function editUserData(id: number, userInfo: any) {
+  return hyRequest.patch({
+    url: `/users/${id}`,
+    data: userInfo,
   });
 }
