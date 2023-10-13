@@ -63,21 +63,31 @@
 import type { ElForm } from "element-plus";
 import { ref, reactive } from "vue";
 
+// 定义自定义事件
+const emit = defineEmits(["queryClick", "resetClick"]);
+
+// 定义form数据
 const searchForm = reactive({
   name: "",
   realname: "",
   cellphone: "",
   enable: 1,
-  createAt: [],
+  createAt: "",
 });
 
 // 重置的操作
 const formRef = ref<InstanceType<typeof ElForm>>();
 function handleResetClick() {
+  // form表单的数据重置
   formRef.value?.resetFields();
+
+  emit("resetClick");
 }
 
-function handleQueryClick() {}
+// 查询的操作
+function handleQueryClick() {
+  emit("queryClick", searchForm);
+}
 </script>
 <style lang="less" scoped>
 .search {

@@ -2,7 +2,7 @@
   <div class="content">
     <div class="header">
       <h3 class="title">用户列表</h3>
-      <el-button type="primary">新建用户</el-button>
+      <el-button type="primary" @click="handleNewUserClick">新建用户</el-button>
     </div>
     <div class="table">
       <el-table :data="usersList" border style="width: 100%">
@@ -32,37 +32,105 @@
           prop="cellphone"
           width="150px"
         />
-        <el-table-column
-          align="center"
-          label="状态"
-          prop="enable"
-          width="80px"
-        />
-        <el-table-column align="center" label="创建时间" prop="createAt" />
-        <el-table-column align="center" label="更新时间" prop="updateAt" />
+        <el-table-column align="center" label="状态" prop="enable" width="90px">
+          <template #default="scope">
+            <el-button
+              sieze="small"
+              plain
+              :type="scope.row.enable ? 'primary' : 'danger'"
+            >
+              {{ scope.row.enable ? "启用" : "禁用" }}
+            </el-button>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="创建时间" prop="createAt">
+          <template #default="scope">
+            <div>
+              {{ formatUTC(scope.row.createAt) }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="更新时间" prop="updateAt">
+          <template #default="scope">
+            <div>
+              {{ formatUTC(scope.row.updateAt) }}
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column align="center" label="操作" width="160px">
-          <el-button icon="Edit" text type="primary" size="small">
-            编辑
-          </el-button>
-          <el-button icon="Delete" text type="danger" size="small">
-            删除
-          </el-button>
+          <template #default="scope">
+            <el-button icon="Edit" text type="primary" size="small">
+              编辑
+            </el-button>
+            <el-button
+              icon="Delete"
+              text
+              type="danger"
+              size="small"
+              @click="handleDeleteBtnClick(scope.row.id)"
+            >
+              删除
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
-    <div class="pagination">分页</div>
+    <div class="pagination">
+      <el-pagination
+        v-model:current-page="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 30]"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="usersTotalCount"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import useSystemStore from "@/store/main/system/system";
+import { formatUTC } from "@/utils/format";
+import { ref } from "vue";
+
+// 页码相关
+const currentPage = ref(1);
+const pageSize = ref(10);
+function handleSizeChange() {
+  featchUserListData();
+}
+function handleCurrentChange() {
+  featchUserListData();
+}
 
 // 请求usersList数据
 const systemStore = useSystemStore();
-systemStore.postUsersListAction();
+featchUserListData();
 
 // 获取usersList数据进行展示
-const { usersList } = storeToRefs(systemStore);
+const { usersList, usersTotalCount } = storeToRefs(systemStore);
+
+// 用于网络请求
+function featchUserListData(formData: any = {}) {
+  // 获取offset、size
+  const size = pageSize.value;
+  const offset = (currentPage.value - 1) * size;
+  const pageInfo = { size, offset };
+
+  const queryInfo = { ...pageInfo, ...formData };
+  systemStore.postUsersListAction(queryInfo);
+}
+
+// 删除的操作
+function handleDeleteBtnClick(id: number) {
+  systemStore.deleteUserByIdAction(id);
+}
+
+// 新建用户的操作
+function handleNewUserClick() {}
+
+defineExpose({ featchUserListData });
 </script>
 <style lang="less" scoped>
 .content {
@@ -96,7 +164,7 @@ const { usersList } = storeToRefs(systemStore);
     }
   }
 
-  .footer {
+  .pagination {
     display: flex;
     justify-content: flex-end;
     margin-top: 15px;
