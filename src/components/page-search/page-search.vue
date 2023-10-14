@@ -1,8 +1,46 @@
 <template>
   <div class="search">
     <!-- 输入查询关键字的表单 -->
-    <el-form ref="formRef" label-width="80px" size="large" :model="searchForm">
-      <el-row :gutter="20"> </el-row>
+    <el-form
+      ref="formRef"
+      :label-width="searchConfig.labelWidth ?? '80px'"
+      size="large"
+      :model="searchForm"
+    >
+      <el-row :gutter="20">
+        <template v-for="item in searchConfig.formItems" :key="item.prop">
+          <el-col :span="item.span">
+            <el-form-item :label="item.label" :prop="item.prop">
+              <!-- 普通输入框的类型 -->
+              <template v-if="item.type === 'input'">
+                <el-input v-model="searchForm[item.prop]" v-bind="item.bind" />
+              </template>
+
+              <!-- 时间选择器的类型 -->
+              <template v-if="item.type === 'date-picker'">
+                <el-date-picker
+                  v-model="searchForm[item.prop]"
+                  v-bind="item.bind"
+                />
+              </template>
+
+              <!-- 选择器的类型 -->
+              <template v-if="item.type === 'select'">
+                <el-select
+                  v-model="searchForm[item.prop]"
+                  v-bind="item.bind"
+                  style="width: 100%"
+                >
+                  <template v-for="option in item.options" :key="option.value">
+                    <el-option :label="option.label" :value="option.value">
+                    </el-option>
+                  </template>
+                </el-select>
+              </template>
+            </el-form-item>
+          </el-col>
+        </template>
+      </el-row>
     </el-form>
 
     <!-- 重置和搜索的按钮 -->
@@ -18,11 +56,24 @@
 import type { ElForm } from "element-plus";
 import { ref, reactive } from "vue";
 
+interface IProps {
+  searchConfig: {
+    labelWidth?: string;
+    formItems: any[];
+  };
+}
+
 // 定义自定义事件
 const emit = defineEmits(["queryClick", "resetClick"]);
+// 接受外部组件传递的属性
+const props = defineProps<IProps>();
 
 // 定义form数据
-const searchForm = reactive({});
+const initialForm: any = {};
+for (const item of props.searchConfig.formItems) {
+  initialForm[item.prop] = item.initialValue ?? "";
+}
+const searchForm = reactive(initialForm);
 
 // 重置的操作
 const formRef = ref<InstanceType<typeof ElForm>>();
@@ -38,6 +89,7 @@ function handleQueryClick() {
   emit("queryClick", searchForm);
 }
 </script>
+
 <style lang="less" scoped>
 .search {
   background-color: #fff;
