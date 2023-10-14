@@ -15,38 +15,44 @@
       <template #leader="scope"> {{ scope.row[scope.prop] }} </template>
     </page-content>
 
-    <page-modal ref="modalRef" />
+    <page-modal ref="modalRef" :modal-config="modalConfigRef" />
   </div>
 </template>
 
 <script setup lang="ts" name="department">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import PageSearch from "@/components/page-search/page-search.vue";
 import PageContent from "@/components/page-content/page-content.vue";
-import PageModal from "./c-cpns/page-modal.vue";
+import PageModal from "@/components/page-modal/page-modal.vue";
 
 import searchConfig from "./config/search.config";
 import contentConfig from "./config/content.config";
+import modalConfig from "./config/modal.config";
+import useMainStore from "@/store/main/main";
 
-// 点击了查询
-const contentRef = ref<InstanceType<typeof PageContent>>();
-function handleQueryClick(queryInfo: any) {
-  contentRef.value?.featchPageListData(queryInfo);
-}
-// 点击了重置
-function handleResetClick() {
-  contentRef.value?.featchPageListData();
-}
+import usePageContent from "@/hooks/usePageContent";
+import usePageModal from "@/hooks/usePageModal";
 
-const modalRef = ref<InstanceType<typeof PageModal>>();
-// 点击了新增
-function handleNewBtnClick() {
-  modalRef.value?.setModal();
-}
-// 点击了编辑
-function handleEditBtnClick(itemData: any) {
-  modalRef.value?.setModal(false, itemData);
-}
+// 对mofalConfig进行操作
+const modalConfigRef = computed(() => {
+  const mainStore = useMainStore();
+  const departments = mainStore.entireDepartments.map((item) => {
+    return { label: item.name, value: item.id };
+  });
+  modalConfig.formItems.forEach((item) => {
+    if (item.formItemBind.prop === "parentId") {
+      item.options = departments as any;
+    }
+  });
+
+  return modalConfig;
+});
+
+// 查询和重置
+const { contentRef, handleQueryClick, handleResetClick } = usePageContent();
+
+// 新增和编辑
+const { modalRef, handleNewBtnClick, handleEditBtnClick } = usePageModal();
 </script>
 
 <style scoped></style>

@@ -17,7 +17,7 @@
               <!-- 普通输入框的类型 -->
               <template v-if="item.type === 'input'">
                 <el-input
-                  v-model="searchForm[item.prop]"
+                  v-model="searchForm[item.formItemBind.prop]"
                   v-bind="item.componentBind"
                 />
               </template>
@@ -25,7 +25,7 @@
               <!-- 时间选择器的类型 -->
               <template v-if="item.type === 'date-picker'">
                 <el-date-picker
-                  v-model="searchForm[item.prop]"
+                  v-model="searchForm[item.formItemBind.prop]"
                   v-bind="item.componentBind"
                 />
               </template>
@@ -33,7 +33,7 @@
               <!-- 选择器的类型 -->
               <template v-if="item.type === 'select'">
                 <el-select
-                  v-model="searchForm[item.prop]"
+                  v-model="searchForm[item.formItemBind.prop]"
                   v-bind="item.componentBind"
                   style="width: 100%"
                 >
