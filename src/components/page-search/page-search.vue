@@ -8,19 +8,25 @@
       :model="searchForm"
     >
       <el-row :gutter="20">
-        <template v-for="item in searchConfig.formItems" :key="item.prop">
+        <template
+          v-for="item in searchConfig.formItems"
+          :key="item.formItemBind.prop"
+        >
           <el-col :span="item.span">
-            <el-form-item :label="item.label" :prop="item.prop">
+            <el-form-item v-bind="item.formItemBind">
               <!-- 普通输入框的类型 -->
               <template v-if="item.type === 'input'">
-                <el-input v-model="searchForm[item.prop]" v-bind="item.bind" />
+                <el-input
+                  v-model="searchForm[item.prop]"
+                  v-bind="item.componentBind"
+                />
               </template>
 
               <!-- 时间选择器的类型 -->
               <template v-if="item.type === 'date-picker'">
                 <el-date-picker
                   v-model="searchForm[item.prop]"
-                  v-bind="item.bind"
+                  v-bind="item.componentBind"
                 />
               </template>
 
@@ -28,7 +34,7 @@
               <template v-if="item.type === 'select'">
                 <el-select
                   v-model="searchForm[item.prop]"
-                  v-bind="item.bind"
+                  v-bind="item.componentBind"
                   style="width: 100%"
                 >
                   <template v-for="option in item.options" :key="option.value">

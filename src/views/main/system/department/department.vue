@@ -5,11 +5,16 @@
       @query-click="handleQueryClick"
       @reset-click="handleResetClick"
     />
+
     <page-content
       ref="contentRef"
+      :content-config="contentConfig"
       @new-click="handleNewBtnClick"
       @edit-click="handleEditBtnClick"
-    />
+    >
+      <template #leader="scope"> {{ scope.row[scope.prop] }} </template>
+    </page-content>
+
     <page-modal ref="modalRef" />
   </div>
 </template>
@@ -17,10 +22,11 @@
 <script setup lang="ts" name="department">
 import { ref } from "vue";
 import PageSearch from "@/components/page-search/page-search.vue";
-import PageContent from "./c-cpns/page-content.vue";
+import PageContent from "@/components/page-content/page-content.vue";
 import PageModal from "./c-cpns/page-modal.vue";
 
 import searchConfig from "./config/search.config";
+import contentConfig from "./config/content.config";
 
 // 点击了查询
 const contentRef = ref<InstanceType<typeof PageContent>>();

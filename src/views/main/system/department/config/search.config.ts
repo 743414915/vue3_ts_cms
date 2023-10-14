@@ -3,28 +3,34 @@ const searchConfig = {
     {
       type: "input",
       span: 8,
-      prop: "name",
-      label: "部门名称",
       initialValue: "",
-      bind: {
+      formItemBind: {
+        prop: "name",
+        label: "部门名称",
+      },
+      componentBind: {
         placeholder: "请输入查询的部门名称",
       },
     },
     {
       type: "input",
       span: 8,
-      prop: "leader",
-      label: "部门领导",
-      bind: {
+      formItemBind: {
+        prop: "leader",
+        label: "部门领导",
+      },
+      componentBind: {
         placeholder: "请输入查询的领导名称",
       },
     },
     {
       type: "select",
       span: 8,
-      prop: "enable",
-      label: "状态",
-      bind: {
+      formItemBind: {
+        prop: "enable",
+        label: "状态",
+      },
+      componentBind: {
         placeholder: "请输入查询的领导名称",
       },
       options: [
@@ -35,9 +41,11 @@ const searchConfig = {
     {
       type: "date-picker",
       span: 8,
-      prop: "createAt",
-      label: "创建时间",
-      bind: {
+      formItemBind: {
+        prop: "createAt",
+        label: "创建时间",
+      },
+      componentBind: {
         type: "daterange",
         rangeSeparator: "到",
         startPlaceholder: "开始时间",
