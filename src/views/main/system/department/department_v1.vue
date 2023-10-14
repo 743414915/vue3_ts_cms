@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts" name="department">
-import PageSearch from "@/components/page-search/page-search.vue";
+import PageSearch from "./c-cpns/page-search.vue";
 import PageContent from "./c-cpns/page-content.vue";
 import PageModal from "./c-cpns/page-modal.vue";
 import { ref } from "vue";
