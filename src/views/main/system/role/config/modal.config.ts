@@ -27,6 +27,14 @@ const modalConfig = {
         placeholder: "请输入权限介绍",
       },
     },
+    {
+      type: "custom",
+      span: 8,
+      formItemBind: {
+        label: "权限分配",
+      },
+      slotName: "menulist",
+    },
   ],
 };
 

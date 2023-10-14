@@ -13,7 +13,7 @@
         <el-form :model="formData" label-width="80px" size="large">
           <template
             v-for="item in modalConfig.formItems"
-            :key="item.formItemBind.prop"
+            :key="item.formItemBind?.prop"
           >
             <el-form-item v-bind="item.formItemBind">
               <!-- 普通输入框的类型 -->
@@ -45,6 +45,11 @@
                   </template>
                 </el-select>
               </template>
+
+              <!-- 字定义插槽的类型 -->
+              <template v-if="item.type === 'custom'">
+                <slot :name="item.slotName"></slot>
+              </template>
             </el-form-item>
           </template>
         </el-form>
@@ -74,6 +79,7 @@ interface IProps {
     };
     formItems: any[];
   };
+  otherInfo?: any;
 }
 const props = defineProps<IProps>();
 
@@ -130,16 +136,22 @@ function handleConfirmClick() {
   // 隐藏dialog
   setModalNotVisible();
 
+  // 合并formData以及外部组件传递进来的数据
+  let infoData = { ...formData };
+  if (props.otherInfo) {
+    infoData = { ...infoData, ...props.otherInfo };
+  }
+
   if (!isNewRef.value && editData.value) {
     // 修改
     systemStore.editPageDataAction(
       props.modalConfig.pageName,
       editData.value.id,
-      formData,
+      infoData,
     );
   } else {
     // 新建
-    systemStore.newPageDataAction(props.modalConfig.pageName, formData);
+    systemStore.newPageDataAction(props.modalConfig.pageName, infoData);
   }
 }
 

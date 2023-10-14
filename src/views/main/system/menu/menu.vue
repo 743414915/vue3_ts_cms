@@ -1,10 +1,22 @@
 <template>
   <div class="menu">
-    <h2>menu</h2>
+    <page-content
+      ref="contentRef"
+      :content-config="contentConfig"
+      @new-click="handleNewBtnClick"
+      @edit-click="handleEditBtnClick"
+    />
   </div>
 </template>
 
-<script setup lang="ts" name="menu"></script>
+<script setup lang="ts" name="menu">
+import PageContent from "@/components/page-content/page-content.vue";
+import contentConfig from "./config/content.config";
+
+import usePageModal from "@/hooks/usePageModal";
+// 新增和编辑
+const { modalRef, handleNewBtnClick, handleEditBtnClick } = usePageModal();
+</script>
 
 <style scoped>
 .menu {

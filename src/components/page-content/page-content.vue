@@ -7,7 +7,12 @@
       </el-button>
     </div>
     <div class="table">
-      <el-table :data="pageList" border style="width: 100%">
+      <el-table
+        :data="pageList"
+        border
+        style="width: 100%"
+        v-bind="contentConfig.childrenTree"
+      >
         <template v-for="item in contentConfig.propsList" :key="item.prop">
           <!-- 格式化时间 -->
           <template v-if="item.type === 'timer'">
@@ -87,10 +92,11 @@ interface IProps {
   contentConfig: {
     pageName: string;
     header: {
-      title: string;
+      title?: string;
       btnTitle?: string;
     };
     propsList: any[];
+    childrenTree?: any;
   };
 }
 const props = defineProps<IProps>();

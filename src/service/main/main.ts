@@ -17,3 +17,12 @@ export function getEntireDepartment() {
     url: `/department/list`,
   });
 }
+
+/**
+ * 获取所有菜单
+ */
+export function getEntireMenus() {
+  return hyRequest.post({
+    url: `/menu/list`,
+  });
+}

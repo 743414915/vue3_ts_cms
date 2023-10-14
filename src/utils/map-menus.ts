@@ -78,3 +78,24 @@ export function mapPathToBreadcrumbs(path: string, userMenus: any[]) {
   }
   return breadcrumbs;
 }
+
+/**
+ * 根据菜单项去映射下面所有层级的id
+ * @param menulist 菜单项
+ */
+export function mapMenuListToids(menulist: any[]) {
+  const ids: number[] = [];
+
+  function recurseGetId(menus: any[]) {
+    for (const item of menus) {
+      if (item.children) {
+        recurseGetId(item.children);
+      } else {
+        ids.push(item.id);
+      }
+    }
+  }
+  recurseGetId(menulist);
+
+  return ids;
+}
