@@ -10,13 +10,14 @@ import { localCache } from "@/utils/cache";
 import router from "@/router";
 import { LOGIN_TOKEN } from "@/global/constants";
 import type { RouteRecordRaw } from "vue-router";
-import { mapMenusToRoutes } from "@/utils/map-menus";
+import { mapMenuListToPermissins, mapMenusToRoutes } from "@/utils/map-menus";
 import useMainStore from "../main/main";
 
 interface ILoginState {
   token: string;
   userInfo: any;
   usersMenus: any;
+  permissions: string[];
 }
 const USERINFO = "userInfo";
 const USERSMENUS = "usersMenus";
@@ -27,6 +28,7 @@ const useLoginStore = defineStore("login", {
     token: "",
     userInfo: {},
     usersMenus: [],
+    permissions: [],
   }),
   actions: {
     async loginAccountAction(account: IAccount) {
@@ -54,6 +56,10 @@ const useLoginStore = defineStore("login", {
       const mainStore = useMainStore();
       mainStore.fetchEntirDataAction();
 
+      // 获取登陆用户的所有按钮的权限
+      const permissions: string[] = mapMenuListToPermissins(userMenus);
+      this.permissions = permissions;
+
       // 动态添加路由
       const routes = mapMenusToRoutes(userMenus);
       routes.forEach((route) => router.addRoute("main", route));
@@ -75,6 +81,10 @@ const useLoginStore = defineStore("login", {
         // 请求所有roles/departments的数据
         const mainStore = useMainStore();
         mainStore.fetchEntirDataAction();
+
+        // 获取登陆用户的所有按钮的权限
+        const permissions: string[] = mapMenuListToPermissins(usersMenus);
+        this.permissions = permissions;
 
         // 动态添加路由
         // 动态添加路由

@@ -53,8 +53,10 @@ import { mapMenuListToids } from "@/utils/map-menus";
 const { contentRef, handleQueryClick, handleResetClick } = usePageContent();
 
 // 新增和编辑
-const { modalRef, handleNewBtnClick, handleEditBtnClick } =
-  usePageModal(editCallback);
+const { modalRef, handleNewBtnClick, handleEditBtnClick } = usePageModal(
+  newCallback,
+  editCallback,
+);
 
 // 获取完整的菜单
 const mainStore = useMainStore();
@@ -72,6 +74,11 @@ function editCallback(itemData: any) {
   nextTick(() => {
     const menuIds = mapMenuListToids(itemData.menuList);
     treeRef.value?.setCheckedKeys(menuIds);
+  });
+}
+function newCallback() {
+  nextTick(() => {
+    treeRef.value?.setCheckedKeys([]);
   });
 }
 </script>

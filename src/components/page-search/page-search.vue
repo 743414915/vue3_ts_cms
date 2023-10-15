@@ -1,5 +1,5 @@
 <template>
-  <div class="search">
+  <div class="search" v-if="isQuery">
     <!-- 输入查询关键字的表单 -->
     <el-form
       ref="formRef"
@@ -59,11 +59,13 @@
   </div>
 </template>
 <script setup lang="ts">
+import usePermissions from "@/hooks/usePermissions";
 import type { ElForm } from "element-plus";
 import { ref, reactive } from "vue";
 
 interface IProps {
   searchConfig: {
+    pageName: string;
     labelWidth?: string;
     formItems: any[];
   };
@@ -73,6 +75,9 @@ interface IProps {
 const emit = defineEmits(["queryClick", "resetClick"]);
 // 接受外部组件传递的属性
 const props = defineProps<IProps>();
+
+// 获取按钮权限
+const isQuery = usePermissions(`${props.searchConfig.pageName}:query`);
 
 // 定义form数据
 const initialForm: any = {};

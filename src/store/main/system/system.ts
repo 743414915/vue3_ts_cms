@@ -9,6 +9,7 @@ import {
   postUsersListData,
 } from "@/service/main/system/system";
 import { defineStore } from "pinia";
+import useMainStore from "../main";
 
 interface ISystemState {
   usersList: any[];
@@ -44,6 +45,11 @@ const useSystemStore = defineStore("system", {
 
       // 重新请求新的数据
       this.postUsersListAction({ offset: 0, size: 10 });
+
+      // 获取最新数据
+      const mainStore = useMainStore();
+      mainStore.fetchEntirDataAction();
+
       return newResult;
     },
     async editUserDataAction(id: number, userInfo: any) {
@@ -52,6 +58,11 @@ const useSystemStore = defineStore("system", {
 
       // 重新请求新的数据
       this.postUsersListAction({ offset: 0, size: 10 });
+
+      // 获取最新数据
+      const mainStore = useMainStore();
+      mainStore.fetchEntirDataAction();
+
       return editResult;
     },
 
@@ -78,6 +89,11 @@ const useSystemStore = defineStore("system", {
 
       // 重新请求新的数据
       this.postPageListAction(pageName, { offset: 0, size: 10 });
+
+      // 保存最新数据
+      const mainStore = useMainStore();
+      mainStore.fetchEntirDataAction();
+
       return deleteResult;
     },
 
@@ -91,6 +107,11 @@ const useSystemStore = defineStore("system", {
 
       // 重新请求新的数据
       this.postPageListAction(pageName, { offset: 0, size: 10 });
+
+      // 保存最新数据
+      const mainStore = useMainStore();
+      mainStore.fetchEntirDataAction();
+
       return newResult;
     },
 
@@ -104,6 +125,11 @@ const useSystemStore = defineStore("system", {
 
       // 重新请求新的数据
       this.postPageListAction(pageName, { offset: 0, size: 10 });
+
+      // 保存最新数据
+      const mainStore = useMainStore();
+      mainStore.fetchEntirDataAction();
+
       return editResult;
     },
   },

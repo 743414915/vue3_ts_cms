@@ -7,7 +7,7 @@ const router = createRouter({
   history: createWebHashHistory(),
   // 映射关系
   routes: [
-    { path: "/", redirect: "/main" },
+    { path: "/", redirect: "/main/system/user" },
     {
       path: "/login",
       component: () => import("@/views/login"),

@@ -143,7 +143,7 @@ function handleConfirmClick() {
   }
 
   if (!isNewRef.value && editData.value) {
-    // 修改
+    // 编辑
     systemStore.editPageDataAction(
       props.modalConfig.pageName,
       editData.value.id,
