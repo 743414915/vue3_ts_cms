@@ -45,7 +45,7 @@ npm run build
 npm run lint
 ```
 
-# 配置vscode保存文件时自动格式化
+## 配置vscode保存文件时自动格式化
 
 ### vscode安装prettier插件
 
