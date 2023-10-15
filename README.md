@@ -45,28 +45,10 @@ npm run build
 npm run lint
 ```
 
-# commit 提交自动格式化代码
+# 配置vscode保存文件时自动格式化
 
-## 执行命令行
+### vscode安装prettier插件
 
-```sh
-npx husky-init '&&' npm install
-```
+### 设置=》搜索 Editor: Default Formatter =》选择prettier
 
-## 修改文件
-
-### 2.pre-commit 文件中 添加 npm run lint命令
-
-# commit 提交规范
-
-## 执行命令行
-
-```sh
-npm i commitizen -D
-npx commitizen init cz-conventional-changelog --save-dev --save-exact
-```
-
-```sh
-提交过程:
-npx cz
-```
+### 设置=》搜索 Editor: Format On Save =》勾选
